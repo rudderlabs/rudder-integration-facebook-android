@@ -15,7 +15,7 @@ apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.1"
+    buildToolsVersion "29.0.2"
 
 
     defaultConfig {
@@ -33,10 +33,14 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://dl.bintray.com/rudderstack/rudderstack" }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 
-    compileOnly 'com.rudderlabs.android.sdk:rudder-sdk-core:0.1.1'
+    compileOnly 'com.rudderstack.android.sdk:core:1.0.1'
     implementation 'com.facebook.android:facebook-android-sdk:5.9.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 
