@@ -1,17 +1,17 @@
 ext {
-    bintrayRepo = 'rudder-sdk-android-core'
-    bintrayName = 'rudder-integration-facebook-android'
+    bintrayRepo = 'rudderstack'
+    bintrayName = 'facebook'
 
-    publishedGroupId = 'com.rudderlabs.android.integration.facebook'
+    publishedGroupId = 'com.rudderstack.android.integration'
     libraryName = 'RudderAndroidSdkCore'
-    artifact = 'rudder-integration-facebook-android'
+    artifact = 'facebook'
 
-    libraryDescription = 'Android  SDK for Rudderlabs. Steer your customer data'
+    libraryDescription = 'Android  SDK for RudderStack. Steer your customer data'
 
     siteUrl = 'https://github.com/rudderlabs/rudder-sdk-android'
     gitUrl = 'https://github.com/rudderlabs/rudder-integration-facebook-android.git'
 
-    libraryVersion = '0.1.0'
+    libraryVersion = '0.1.0-beta.2'
 
     developerId = 'arnabp92'
     developerName = 'Arnab Pal'
