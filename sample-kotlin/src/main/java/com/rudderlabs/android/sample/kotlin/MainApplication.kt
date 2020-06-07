@@ -2,13 +2,13 @@ package com.rudderlabs.android.sample.kotlin
 
 import android.app.Application
 import com.rudderlabs.android.integration.facebook.FacebookIntegrationFactory
-import com.rudderlabs.android.sdk.core.RudderClient
-import com.rudderlabs.android.sdk.core.RudderConfig
+import com.rudderstack.android.sdk.core.RudderClient
+import com.rudderstack.android.sdk.core.RudderConfig
 
 class MainApplication : Application() {
     companion object {
         private const val WRITE_KEY = "1Tb4GaOlGHOVE1EeeqBkUZPW4x5"
-        private const val END_POINT_URI = "https://30b276a2.ngrok.io"
+        private const val DATA_PLANE_URL = "https://30b276a2.ngrok.io"
         lateinit var rudderClient: RudderClient
     }
 
@@ -18,7 +18,7 @@ class MainApplication : Application() {
             this,
             WRITE_KEY,
             RudderConfig.Builder()
-                .withEndPointUri(END_POINT_URI)
+                .withDataPlaneUrl(DATA_PLANE_URL)
                 .withLogLevel(4)
                 .withFactory(FacebookIntegrationFactory.FACTORY)
                 .build()

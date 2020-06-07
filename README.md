@@ -1,30 +1,37 @@
-[ ![Download](https://api.bintray.com/packages/rudderlabs-bintray/rudder-sdk-android-core/rudder-integration-facebook-android/images/download.svg?version=0.1.0) ](https://bintray.com/rudderlabs-bintray/rudder-sdk-android-core/rudder-integration-facebook-android/0.1.0/link)
-
 # What is Rudder?
 
 **Short answer:** 
-Rudder is an open-source Segment alternative written in Go, built for the enterprise. .
+Rudder is an open-source Segment alternative written in Go, built for the enterprise.
 
 **Long answer:** 
 Rudder is a platform for collecting, storing and routing customer event data to dozens of tools. Rudder is open-source, can run in your cloud environment (AWS, GCP, Azure or even your data-centre) and provides a powerful transformation framework to process your event data on the fly.
 
 Released under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-## Getting Started with Facebook App Events Integration of Android SDK
-1. Add [Facebook App Events](https://developers.facebook.com/docs/app-events/) as a destination in the [Dashboard](https://app.rudderlabs.com/) and define ```apiKey``` with your Facebook Application ID.
+## Getting Started with Facebook Integration of Android SDK
+1. Add [Facebook](https://www.facebook.com) as a destination in the [Dashboard](https://app.rudderstack.com/) and define `applicationId`, and `clientKey`. If you turn on the Development Environment flag, make sure to put your development key in `clientKey`.
 
-2. Follow point #3 of [these](https://developers.facebook.com/docs/app-events/getting-started-app-events-android) instructions and setup your facebook app events application.  
+2. Setup the Hybrid Mode of integration: 
+  - Turning on the switch beside `Initialize Native SDK to send automated events` in the dashboard will initialize the Facebook native SDK in the application.
+  - Turning on the switch beside `Use native SDK to send user generated events` in the dashboard will instruct your `data-plane` to skip the events for Facebook and the events will be sent from the Facebook SDK.
 
-2. Add these lines to your ```app/build.gradle```
+3. Add these lines to your ```app/build.gradle```
 ```
 repositories {
-  jCenter()
+    maven { url "https://dl.bintray.com/rudderstack/rudderstack" }
 }
 ```
-3. Add the dependency under ```dependencies```
+4. Add the dependency under ```dependencies```
 ```
-implementation 'com.rudderlabs.android.sdk:rudder-sdk-core:0.1.0'
-implementation 'com.rudderlabs.android.integration.facebook:rudder-integration-facebook-android:0.1.0'
+// Rudder core sdk and facebook extension
+implementation 'com.rudderstack.android.sdk:core:1.0.2'
+implementation 'com.rudderstack.android.integration:facebook:0.1.0'
+
+// facebook core sdk
+implementation 'com.facebook.android:facebook-android-sdk:5.9.0'
+
+// gson
+implementation 'com.google.code.gson:gson:2.8.6'
 ```
 
 ## Initialize ```RudderClient```
@@ -33,8 +40,7 @@ val rudderClient: RudderClient = RudderClient.getInstance(
     this,
     WRITE_KEY,
     RudderConfig.Builder()
-        .withEndPointUri(END_POINT_URI)
-        .withLogLevel(RudderLogger.RudderLogLevel.DEBUG)
+        .withDataPlaneUrl(DATA_PLANE_URL)
         .withFactory(FacebookIntegrationFactory.FACTORY)
         .build()
 )
@@ -43,7 +49,5 @@ val rudderClient: RudderClient = RudderClient.getInstance(
 ## Send Events
 Follow the steps from [Rudder Android SDK](https://github.com/rudderlabs/rudder-sdk-android)
 
-# Coming Soon
-1. Native platform SDK integration support
-2. More documentation
-3. More destination support
+## Contact Us
+If you come across any issues while configuring or using RudderStack, please feel free to [contact us](https://rudderstack.com/contact/) or start a conversation on our [Discord](https://discordapp.com/invite/xNEdEGw) channel. We will be happy to help you.

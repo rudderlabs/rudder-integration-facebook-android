@@ -15,7 +15,7 @@ apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
 
     defaultConfig {
@@ -40,7 +40,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 
-    compileOnly 'com.rudderstack.android.sdk:core:1.0.1'
+    compileOnly 'com.rudderstack.android.sdk:core:1.0.2'
     implementation 'com.facebook.android:facebook-android-sdk:5.9.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 
