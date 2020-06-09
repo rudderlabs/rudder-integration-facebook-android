@@ -4,11 +4,12 @@ import android.app.Application
 import com.rudderlabs.android.integration.facebook.FacebookIntegrationFactory
 import com.rudderstack.android.sdk.core.RudderClient
 import com.rudderstack.android.sdk.core.RudderConfig
+import com.rudderstack.android.sdk.core.RudderLogger
 
 class MainApplication : Application() {
     companion object {
-        private const val WRITE_KEY = "1Tb4GaOlGHOVE1EeeqBkUZPW4x5"
-        private const val DATA_PLANE_URL = "https://30b276a2.ngrok.io"
+        private const val WRITE_KEY = "1d4xNa8onF7fSuTXeVivKqOzfZr"
+        private const val DATA_PLANE_URL = "https://hosted.rudderlabs.com"
         lateinit var rudderClient: RudderClient
     }
 
@@ -19,8 +20,10 @@ class MainApplication : Application() {
             WRITE_KEY,
             RudderConfig.Builder()
                 .withDataPlaneUrl(DATA_PLANE_URL)
-                .withLogLevel(4)
+                .withLogLevel(RudderLogger.RudderLogLevel.DEBUG)
                 .withFactory(FacebookIntegrationFactory.FACTORY)
+                .withTrackLifecycleEvents(true)
+                .withRecordScreenViews(true)
                 .build()
         )
     }

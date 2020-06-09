@@ -3,6 +3,7 @@ package com.rudderlabs.android.integration.facebook;
 import android.os.Bundle;
 
 import com.facebook.FacebookSdk;
+import com.facebook.LoggingBehavior;
 import com.facebook.appevents.AppEventsLogger;
 import com.rudderstack.android.sdk.core.MessageType;
 import com.rudderstack.android.sdk.core.RudderClient;
@@ -32,12 +33,22 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
 
     private FacebookIntegrationFactory(Object config, RudderClient client) {
         if (config != null && client != null && client.getApplication() != null) {
-            String facebookApplicationId = (String) ((Map<String, Object>) config).get("apiKey");
+            String facebookApplicationId = (String) ((Map<String, Object>) config).get("appID");
             FacebookSdk.setApplicationId(facebookApplicationId);
             FacebookSdk.sdkInitialize(client.getApplication());
             FacebookSdk.setAutoInitEnabled(true);
             FacebookSdk.setAutoLogAppEventsEnabled(true);
             FacebookSdk.fullyInitialize();
+
+//            FacebookSdk.addLoggingBehavior(LoggingBehavior.REQUESTS);
+//            FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+//            FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_RAW_RESPONSES);
+//            FacebookSdk.addLoggingBehavior(LoggingBehavior.CACHE);
+//            FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS);
+//            FacebookSdk.addLoggingBehavior(LoggingBehavior.DEVELOPER_ERRORS);
+//            FacebookSdk.addLoggingBehavior(LoggingBehavior.GRAPH_API_DEBUG_WARNING);
+//            FacebookSdk.addLoggingBehavior(LoggingBehavior.GRAPH_API_DEBUG_INFO);
+
             AppEventsLogger.activateApp(client.getApplication(), facebookApplicationId);
 
             this.instance = AppEventsLogger.newLogger(client.getApplication());
