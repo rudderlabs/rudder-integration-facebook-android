@@ -1,17 +1,5 @@
-buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-    }
-}
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 29
@@ -33,14 +21,10 @@ android {
     }
 }
 
-repositories {
-    maven { url "https://dl.bintray.com/rudderstack/rudderstack" }
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 
-    compileOnly 'com.rudderstack.android.sdk:core:1.0.2'
+    compileOnly 'com.rudderstack.android.sdk:core:1.0.11'
     implementation 'com.facebook.android:facebook-android-sdk:5.9.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 
