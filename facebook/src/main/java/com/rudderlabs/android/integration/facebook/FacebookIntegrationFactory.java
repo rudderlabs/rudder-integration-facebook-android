@@ -36,19 +36,12 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
     };
 
     private FacebookIntegrationFactory(Object config, RudderClient client, RudderConfig rudderConfig) {
-        if (config != null && client != null && client.getApplication() != null) {
-
+        if (client.getApplication() != null) {
             Gson gson = new Gson();
             FacebookDestinationConfig destinationConfig = gson.fromJson(
                     gson.toJson(config),
                     FacebookDestinationConfig.class
             );
-
-            FacebookSdk.setApplicationId(destinationConfig.appID);
-            FacebookSdk.sdkInitialize(client.getApplication());
-            FacebookSdk.setAutoInitEnabled(true);
-            FacebookSdk.setAutoLogAppEventsEnabled(true);
-            FacebookSdk.fullyInitialize();
 
             if (rudderConfig.getLogLevel() >= RudderLogger.RudderLogLevel.DEBUG) {
                 FacebookSdk.setIsDebugEnabled(true);
@@ -63,7 +56,6 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                 RudderLogger.logDebug("FacebookSdk.setDataProcessingOptions(new String[] {});");
             }
             AppEventsLogger.activateApp(client.getApplication(), destinationConfig.appID);
-
             this.instance = AppEventsLogger.newLogger(client.getApplication());
         } else {
             RudderLogger.logError("Facebook Factory is not initialized");
@@ -108,10 +100,10 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                     if (eventName == null)
                         return;
                     Bundle paramBundle = Utils.getBundleForMap(element.getProperties());
-                    Double revenue = Utils.getRevenue(element.getProperties());
-                    String currency = Utils.getCurrency(element.getProperties());
                     // If properties of an event exist
                     if (paramBundle != null) {
+                        Double revenue = Utils.getRevenue(element.getProperties());
+                        String currency = Utils.getCurrency(element.getProperties());
                         // If revenue is present in the properties of an event
                         if (revenue != null) {
                             instance.logPurchase(BigDecimal.valueOf(revenue), Currency.getInstance(currency));

@@ -5,8 +5,5 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
-        <meta-data
-            android:name="com.facebook.sdk.AutoInitEnabled"
-            android:value="false" />
     </application>
 </manifest>
