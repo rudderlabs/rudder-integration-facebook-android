@@ -3,9 +3,11 @@ package com.rudderlabs.android.integration.facebook;
 import android.os.Bundle;
 
 import com.facebook.FacebookSdk;
+
 import com.facebook.LoggingBehavior;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.gson.Gson;
 import com.rudderstack.android.sdk.core.MessageType;
 import com.rudderstack.android.sdk.core.RudderClient;
 import com.rudderstack.android.sdk.core.RudderConfig;
@@ -16,7 +18,6 @@ import com.rudderstack.android.sdk.core.RudderTraits;
 
 import java.math.BigDecimal;
 import java.util.Currency;
-import java.util.Map;
 
 public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogger> {
     private static final String FACEBOOK_KEY = "Facebook App Events";
@@ -36,8 +37,14 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
 
     private FacebookIntegrationFactory(Object config, RudderClient client, RudderConfig rudderConfig) {
         if (config != null && client != null && client.getApplication() != null) {
-            String facebookApplicationId = (String) ((Map<String, Object>) config).get("appID");
-            FacebookSdk.setApplicationId(facebookApplicationId);
+
+            Gson gson = new Gson();
+            FacebookDestinationConfig destinationConfig = gson.fromJson(
+                    gson.toJson(config),
+                    FacebookDestinationConfig.class
+            );
+
+            FacebookSdk.setApplicationId(destinationConfig.appID);
             FacebookSdk.sdkInitialize(client.getApplication());
             FacebookSdk.setAutoInitEnabled(true);
             FacebookSdk.setAutoLogAppEventsEnabled(true);
@@ -48,7 +55,14 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                 FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS);
             }
 
-            AppEventsLogger.activateApp(client.getApplication(), facebookApplicationId);
+            if (destinationConfig.limitedDataUse) {
+                FacebookSdk.setDataProcessingOptions(new String[]{"LDU"}, destinationConfig.dpoCountry, destinationConfig.dpoState);
+                RudderLogger.logDebug(String.format("FacebookSdk.setDataProcessingOptions(new String[] {\"LDU\"}, %s, %s);", destinationConfig.dpoCountry, destinationConfig.dpoState));
+            } else {
+                FacebookSdk.setDataProcessingOptions(new String[]{});
+                RudderLogger.logDebug("FacebookSdk.setDataProcessingOptions(new String[] {});");
+            }
+            AppEventsLogger.activateApp(client.getApplication(), destinationConfig.appID);
 
             this.instance = AppEventsLogger.newLogger(client.getApplication());
         } else {

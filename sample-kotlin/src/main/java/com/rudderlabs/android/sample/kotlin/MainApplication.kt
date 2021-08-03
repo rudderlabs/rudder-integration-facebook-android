@@ -5,9 +5,6 @@ import com.rudderlabs.android.integration.facebook.FacebookIntegrationFactory
 import com.rudderstack.android.sdk.core.RudderClient
 import com.rudderstack.android.sdk.core.RudderConfig
 import com.rudderstack.android.sdk.core.RudderLogger
-import com.facebook.FacebookSdk
-
-import com.facebook.LoggingBehavior
 
 
 class MainApplication : Application() {

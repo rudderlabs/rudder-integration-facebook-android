@@ -40,15 +40,16 @@ class MainActivity : AppCompatActivity() {
         )
 
         MainApplication.rudderClient.track(
-            "Product Added",
+            "Product Downloaded",
             RudderProperty()
-                .putValue("revenue",345.67)
+                .putValue("revenue",347.67)
+                .putValue("currency","INR")
                 .putValue("product_id", "product_001")
         )
 
         MainApplication.rudderClient.track(
             RudderMessageBuilder()
-                .setEventName("revenue_1kaksjkajskajslajslajslajslajsajslajslajslasslajslajslasjlajslajslajslajslajslajsl")
+                .setEventName("testing_1kaksjkajskajslajslajslajslajsajslajslajslasslajslajslasjlajslajslajslajslajslajsl")
                 .setProperty(
                     TrackPropertyBuilder()
                         .setCategory("test_category")
