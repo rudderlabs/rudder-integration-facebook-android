@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.facebook.FacebookSdk;
 import com.facebook.LoggingBehavior;
+import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
 import com.rudderstack.android.sdk.core.MessageType;
 import com.rudderstack.android.sdk.core.RudderClient;
@@ -13,6 +14,8 @@ import com.rudderstack.android.sdk.core.RudderLogger;
 import com.rudderstack.android.sdk.core.RudderMessage;
 import com.rudderstack.android.sdk.core.RudderTraits;
 
+import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.Map;
 
 public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogger> {
@@ -22,7 +25,7 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
     public static Factory FACTORY = new Factory() {
         @Override
         public RudderIntegration<?> create(Object settings, RudderClient client, RudderConfig rudderConfig) {
-            return new FacebookIntegrationFactory(settings, client);
+            return new FacebookIntegrationFactory(settings, client, rudderConfig);
         }
 
         @Override
@@ -31,7 +34,7 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
         }
     };
 
-    private FacebookIntegrationFactory(Object config, RudderClient client) {
+    private FacebookIntegrationFactory(Object config, RudderClient client, RudderConfig rudderConfig) {
         if (config != null && client != null && client.getApplication() != null) {
             String facebookApplicationId = (String) ((Map<String, Object>) config).get("appID");
             FacebookSdk.setApplicationId(facebookApplicationId);
@@ -40,14 +43,10 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
             FacebookSdk.setAutoLogAppEventsEnabled(true);
             FacebookSdk.fullyInitialize();
 
-//            FacebookSdk.addLoggingBehavior(LoggingBehavior.REQUESTS);
-//            FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-//            FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_RAW_RESPONSES);
-//            FacebookSdk.addLoggingBehavior(LoggingBehavior.CACHE);
-//            FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS);
-//            FacebookSdk.addLoggingBehavior(LoggingBehavior.DEVELOPER_ERRORS);
-//            FacebookSdk.addLoggingBehavior(LoggingBehavior.GRAPH_API_DEBUG_WARNING);
-//            FacebookSdk.addLoggingBehavior(LoggingBehavior.GRAPH_API_DEBUG_INFO);
+            if (rudderConfig.getLogLevel() >= RudderLogger.RudderLogLevel.DEBUG) {
+                FacebookSdk.setIsDebugEnabled(true);
+                FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS);
+            }
 
             AppEventsLogger.activateApp(client.getApplication(), facebookApplicationId);
 
@@ -90,21 +89,47 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                     );
                     break;
                 case MessageType.TRACK:
+                    // FB Event Names must be <= 40 characters
+                    String eventName = Utils.truncate(element.getEventName(), 40);
+                    if (eventName == null)
+                        return;
                     Bundle paramBundle = Utils.getBundleForMap(element.getProperties());
-                    if (paramBundle == null) {
-                        instance.logEvent(element.getEventName());
-                    } else {
-                        instance.logEvent(element.getEventName(), paramBundle);
+                    Double revenue = Utils.getRevenue(element.getProperties());
+                    String currency = Utils.getCurrency(element.getProperties());
+                    // If properties of an event exist
+                    if (paramBundle != null) {
+                        // If revenue is present in the properties of an event
+                        if (revenue != null) {
+                            instance.logPurchase(BigDecimal.valueOf(revenue), Currency.getInstance(currency));
+                            paramBundle.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, currency);
+                            instance.logEvent(eventName, revenue, paramBundle);
+                            return;
+                        }
+                        instance.logEvent(eventName, paramBundle);
+                        return;
                     }
+                    // If properties of an event doesn't exist
+                    instance.logEvent(eventName);
                     break;
                 case MessageType.SCREEN:
-
+                    // FB Event Names must be <= 40 characters
+                    // 'Viewed' and 'Screen' with spaces take up 14
+                    String screenName = Utils.truncate(element.getEventName(), 26);
+                    if (screenName == null)
+                        return;
+                    if (element.getProperties() != null && element.getProperties().size() != 0) {
+                        Bundle screenProperties = Utils.getBundleForMap(element.getProperties());
+                        instance.logEvent(String.format("Viewed %s Screen", screenName), screenProperties);
+                        return;
+                    }
+                    instance.logEvent(String.format("Viewed %s Screen", screenName));
                     break;
                 default:
                     RudderLogger.logWarn("MessageType is not supported");
                     break;
             }
         }
+
     }
 
     @Override
