@@ -8,6 +8,12 @@ import com.facebook.LoggingBehavior;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.rudderstack.android.sdk.core.MessageType;
 import com.rudderstack.android.sdk.core.RudderClient;
 import com.rudderstack.android.sdk.core.RudderConfig;
@@ -16,6 +22,7 @@ import com.rudderstack.android.sdk.core.RudderLogger;
 import com.rudderstack.android.sdk.core.RudderMessage;
 import com.rudderstack.android.sdk.core.RudderTraits;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Currency;
 
@@ -37,11 +44,28 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
 
     private FacebookIntegrationFactory(Object config, RudderClient client, RudderConfig rudderConfig) {
         if (client.getApplication() != null) {
-            Gson gson = new Gson();
-            FacebookDestinationConfig destinationConfig = gson.fromJson(
-                    gson.toJson(config),
-                    FacebookDestinationConfig.class
-            );
+            // deserialize the destination config json into FacebookDestinationConfig object
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            JsonDeserializer<FacebookDestinationConfig> deserializer =
+                    new JsonDeserializer<FacebookDestinationConfig>() {
+                        @Override
+                        public FacebookDestinationConfig deserialize(
+                                JsonElement json,
+                                Type typeOfT,
+                                JsonDeserializationContext context
+                        ) throws JsonParseException {
+                            JsonObject jsonObject = json.getAsJsonObject();
+                            return new FacebookDestinationConfig(
+                                    Utils.getStringFromJsonObject(jsonObject, "appID"),
+                                    Utils.getBooleanFromJsonObject(jsonObject, "limitedDataUse"),
+                                    Utils.getStringFromJsonObject(jsonObject, "dpoCountry"),
+                                    Utils.getStringFromJsonObject(jsonObject, "dpoState")
+                            );
+                        }
+                    };
+            gsonBuilder.registerTypeAdapter(FacebookDestinationConfig.class, deserializer);
+            Gson customGson = gsonBuilder.create();
+            FacebookDestinationConfig destinationConfig = customGson.fromJson(customGson.toJson(config), FacebookDestinationConfig.class);
 
             if (rudderConfig.getLogLevel() >= RudderLogger.RudderLogLevel.DEBUG) {
                 FacebookSdk.setIsDebugEnabled(true);
