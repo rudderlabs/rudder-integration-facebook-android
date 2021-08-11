@@ -23,7 +23,7 @@ repositories {
 ```
 // Rudder core sdk and facebook extension
 implementation 'com.rudderstack.android.sdk:core:1.0.2'
-implementation 'com.rudderstack.android.integration:facebook:0.1.2'
+implementation 'com.rudderstack.android.integration:facebook:1.0.0'
 
 // facebook core sdk
 implementation 'com.facebook.android:facebook-android-sdk:5.9.0'

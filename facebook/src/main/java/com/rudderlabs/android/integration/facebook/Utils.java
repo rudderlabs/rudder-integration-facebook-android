@@ -3,6 +3,7 @@ package com.rudderlabs.android.integration.facebook;
 import android.os.Bundle;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.util.Map;
 
@@ -53,5 +54,19 @@ public class Utils {
             return (String) eventProperties.get("currency");
         }
         return "USD";
+    }
+
+    static String getStringFromJsonObject(JsonObject json, String key) {
+        if (json.has(key)) {
+            return json.get(key).getAsString();
+        }
+        return null;
+    }
+
+    static Boolean getBooleanFromJsonObject(JsonObject json, String key) {
+        if (json.has(key)) {
+            return json.get(key).getAsBoolean();
+        }
+        return null;
     }
 }
