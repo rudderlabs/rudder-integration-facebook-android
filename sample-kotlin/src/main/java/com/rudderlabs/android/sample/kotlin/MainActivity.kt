@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
         MainApplication.rudderClient.track(
             "Product Downloaded",
             RudderProperty()
-                .putValue("revenue",347.67)
-                .putValue("currency","INR")
+                .putValue("revenue", 347.67)
+                .putValue("currency", "INR")
                 .putValue("product_id", "product_001")
         )
 

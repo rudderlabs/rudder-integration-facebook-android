@@ -56,21 +56,17 @@ public class Utils {
         return "USD";
     }
 
-    static String getStringFromJsonObject(JsonObject json, String key)
-    {
-        if(json.has(key))
-        {
+    static String getStringFromJsonObject(JsonObject json, String key) {
+        if (json.has(key)) {
             return json.get(key).getAsString();
         }
         return null;
     }
 
-    static Boolean getBooleanFromJsonObject(JsonObject json, String key)
-    {
-       if(json.has(key))
-       {
-           return json.get(key).getAsBoolean();
-       }
-       return null;
+    static Boolean getBooleanFromJsonObject(JsonObject json, String key) {
+        if (json.has(key)) {
+            return json.get(key).getAsBoolean();
+        }
+        return null;
     }
 }

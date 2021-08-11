@@ -121,8 +121,9 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                 case MessageType.TRACK:
                     // FB Event Names must be <= 40 characters
                     String eventName = Utils.truncate(element.getEventName(), 40);
-                    if (eventName == null)
+                    if (eventName == null) {
                         return;
+                    }
                     Bundle paramBundle = Utils.getBundleForMap(element.getProperties());
                     // If properties of an event exist
                     if (paramBundle != null) {
@@ -145,8 +146,9 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                     // FB Event Names must be <= 40 characters
                     // 'Viewed' and 'Screen' with spaces take up 14
                     String screenName = Utils.truncate(element.getEventName(), 26);
-                    if (screenName == null)
+                    if (screenName == null) {
                         return;
+                    }
                     if (element.getProperties() != null && element.getProperties().size() != 0) {
                         Bundle screenProperties = Utils.getBundleForMap(element.getProperties());
                         instance.logEvent(String.format("Viewed %s Screen", screenName), screenProperties);
