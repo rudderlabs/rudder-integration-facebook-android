@@ -1,1 +1,3 @@
 include ':sample-kotlin', ':facebook'
+include ':testio'
+project(':testio').projectDir = new File(rootDir, "../../TestIntegration/test")

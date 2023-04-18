@@ -2,6 +2,8 @@ package com.rudderlabs.android.integration.facebook;
 
 import android.os.Bundle;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.facebook.FacebookSdk;
 
 import com.facebook.LoggingBehavior;
@@ -41,6 +43,9 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
             return FACEBOOK_KEY;
         }
     };
+    @VisibleForTesting
+    FacebookIntegrationFactory() {
+    }
 
     private FacebookIntegrationFactory(Object config, RudderClient client, RudderConfig rudderConfig) {
         if (client.getApplication() != null) {
@@ -80,10 +85,14 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                 RudderLogger.logDebug("FacebookSdk.setDataProcessingOptions(new String[] {});");
             }
             AppEventsLogger.activateApp(client.getApplication(), destinationConfig.appID);
-            this.instance = AppEventsLogger.newLogger(client.getApplication());
+            setup(AppEventsLogger.newLogger(client.getApplication()));
         } else {
             RudderLogger.logError("Facebook Factory is not initialized");
         }
+    }
+    @VisibleForTesting
+    void setup(AppEventsLogger appEventsLogger){
+        this.instance = appEventsLogger;
     }
 
     private void processRudderEvent(RudderMessage element) {
