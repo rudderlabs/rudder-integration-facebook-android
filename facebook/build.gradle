@@ -33,8 +33,9 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:16.0.1'
     implementation 'com.google.code.gson:gson:2.8.9'
 
-    testImplementation project(':testio')
-    testImplementation 'com.rudderstack.android.sdk:core:1.12.0'
+//    testImplementation project(':testio')
+    testImplementation 'com.rudderstack.android.test:testio:0.0.0-SNAPSHOT'
+    testImplementation 'com.rudderstack.android.sdk:core:1.13.0'
     testImplementation 'com.android.support.test:rules:1.0.2'
     testImplementation 'com.android.support.test:runner:1.0.2'
     testImplementation "org.robolectric:robolectric:4.3"

@@ -8,8 +8,8 @@ import android.app.Application;
 
 import com.facebook.appevents.AppEventsLogger;
 import com.rudderstack.android.sdk.core.RudderMessage;
-import com.rudderstack.android.testio.Operation;
-import com.rudderstack.android.testio.TestMyIO;
+import com.rudderstack.android.test.testio.Operation;
+import com.rudderstack.android.test.testio.TestMyIO;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
