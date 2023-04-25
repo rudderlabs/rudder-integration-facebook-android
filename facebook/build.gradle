@@ -2,13 +2,11 @@ apply plugin: 'com.android.library'
 
 //namespace 'com.rudderlabs.android.integration.facebook'
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
-
+    compileSdkVersion 32
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 29
+        targetSdkVersion 32
         buildConfigField("String", "VERSION_NAME", "\"${VERSION_NAME}\"")
     }
 
