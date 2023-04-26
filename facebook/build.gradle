@@ -1,15 +1,13 @@
 apply plugin: 'com.android.library'
 
+//namespace 'com.rudderlabs.android.integration.facebook'
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
-
+    compileSdkVersion 32
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0.0"
+        minSdkVersion 15
+        targetSdkVersion 32
+        buildConfigField("String", "VERSION_NAME", "\"${VERSION_NAME}\"")
     }
 
     buildTypes {
@@ -32,5 +30,7 @@ dependencies {
     testImplementation "org.robolectric:robolectric:4.3"
     testImplementation "androidx.test:core-ktx:1.2.0"
 }
+apply from: rootProject.file('gradle/mvn-publish.gradle')
+apply from: rootProject.file('gradle/codecov.gradle')
 
-apply from: './maven.gradle'
+
