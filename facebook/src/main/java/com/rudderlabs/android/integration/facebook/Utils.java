@@ -69,4 +69,21 @@ public class Utils {
         }
         return null;
     }
+
+
+    static Double getValueToSum(Map<String, Object> properties, String propertyKey) {
+        if (properties == null) {
+            return null;
+        }
+        for (Map.Entry<String, Object> entry : properties.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (key.equalsIgnoreCase(propertyKey)) {
+                return Double.parseDouble(String.valueOf(value));
+            }
+        }
+
+        return null;
+    }
+
 }
