@@ -204,6 +204,7 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
             case AppEventsConstants.EVENT_NAME_ADDED_TO_CART:
             case AppEventsConstants.EVENT_NAME_ADDED_TO_WISHLIST:
             case AppEventsConstants.EVENT_NAME_VIEWED_CONTENT:
+                handleStandard(element.getProperties(), params);
                 Double price = getValueToSum(element.getProperties(), RSKeys.Ecommerce.PRICE);
                 if (price != null) {
                     instance.logEvent(eventName, params);
@@ -213,6 +214,7 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
 
             case AppEventsConstants.EVENT_NAME_INITIATED_CHECKOUT:
             case AppEventsConstants.EVENT_NAME_SPENT_CREDITS:
+                handleStandard(element.getProperties(), params);
                 Double value = getValueToSum(element.getProperties(), RSKeys.Ecommerce.VALUE);
                 if (value != null) {
                     instance.logEvent(eventName, params);
