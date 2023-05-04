@@ -33,7 +33,6 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:16.0.1'
     implementation 'com.google.code.gson:gson:2.8.9'
 
-//    testImplementation project(':testio')
     testImplementation 'com.rudderstack.android.test:testio:0.0.0-SNAPSHOT'
     testImplementation 'com.rudderstack.android.sdk:core:1.13.0'
     testImplementation 'com.android.support.test:rules:1.0.2'
@@ -54,4 +53,3 @@ dependencies {
 
 apply from: rootProject.file('gradle/mvn-publish.gradle')
 apply from: rootProject.file('gradle/codecov.gradle')
-//apply from: './maven.gradle'
