@@ -37,7 +37,7 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
     private static final String FACEBOOK_KEY = "Facebook App Events";
     private AppEventsLogger instance;
 
-    private static Set<String> TRACK_RESERVED_KEYWORDS = new HashSet<>(Arrays.asList(
+    private static final Set<String> TRACK_RESERVED_KEYWORDS = new HashSet<>(Arrays.asList(
             RSKeys.Ecommerce.PRODUCT_ID,
             RSKeys.Ecommerce.RATING,
             RSKeys.Ecommerce.PROMOTION_NAME,
@@ -50,7 +50,7 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
             RSKeys.Ecommerce.REVENUE)
     );
 
-    public static Factory FACTORY = new Factory() {
+    public static final Factory FACTORY = new Factory() {
         @Override
         public RudderIntegration<?> create(Object settings, RudderClient client, RudderConfig rudderConfig) {
             return new FacebookIntegrationFactory(settings, client, rudderConfig);
@@ -165,6 +165,7 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                     }
                     if (element.getProperties() != null && element.getProperties().size() != 0) {
                         Bundle screenProperties = Utils.getBundleForMap(element.getProperties());
+                        handleCustomScreen(element.getProperties(), screenProperties);
                         instance.logEvent(String.format("Viewed %s Screen", screenName), screenProperties);
                         return;
                     }
@@ -188,7 +189,7 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
             return;
         }
 
-        handleStandard(element.getProperties(), params);
+        handleCustomTrack(element.getProperties(), params);
         Double revenue = Utils.getRevenue(properties);
         String currency = Utils.getCurrency(properties);
         // If revenue is present in the properties of an event
