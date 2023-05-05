@@ -160,8 +160,8 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                 case MessageType.TRACK:
                     // FB Event Names must be <= 40 characters
                     String eventName = Utils.truncate(element.getEventName(), 40);
-                    if (eventName == null) {
-                        RudderLogger.logDebug("Facebook: Dropping the event as eventName is null.");
+                    if (eventName == null || eventName.length() == 0) {
+                        RudderLogger.logDebug("Facebook: Dropping track event as eventName is null.");
                         return;
                     }
                     track(element, getFacebookEvent(eventName));
@@ -170,11 +170,12 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                     // FB Event Names must be <= 40 characters
                     // 'Viewed' and 'Screen' with spaces take up 14
                     String screenName = Utils.truncate(element.getEventName(), 26);
-                    if (screenName == null) {
+                    if (screenName == null || screenName.length() == 0) {
+                        RudderLogger.logDebug("Facebook: Dropping screen event as eventName is null.");
                         return;
                     }
                     if (element.getProperties() != null && element.getProperties().size() != 0) {
-                        Bundle screenProperties = Utils.getBundleForMap(element.getProperties());
+                        Bundle screenProperties = new Bundle();
                         handleCustomScreenProperties(element.getProperties(), screenProperties);
                         instance.logEvent(String.format("Viewed %s Screen", screenName), screenProperties);
                         return;
@@ -186,13 +187,12 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
                     break;
             }
         }
-
     }
 
     private void track(RudderMessage element, String eventName) {
         Map<String, Object> properties = element.getProperties();
-        Bundle params = Utils.getBundleForMap(properties);
-        handleCustomTrackProperties(element.getProperties(), params);
+        Bundle params = new Bundle();
+        handleCustomTrackProperties(properties, params);
 
         switch (eventName) {
             // Standard events, refer Facebook docs: https://developers.facebook.com/docs/app-events/reference#standard-events-2 for more info
@@ -339,7 +339,19 @@ public class FacebookIntegrationFactory extends RudderIntegration<AppEventsLogge
             if (!isScreenEvent && TRACK_RESERVED_KEYWORDS.contains(key)) {
                 continue;
             }
-            params.putString(key, value.toString());
+            if (value instanceof String) {
+                params.putString(key, (String) value);
+            } else if (value instanceof Integer) {
+                params.putInt(key, (Integer) value);
+            } else if (value instanceof Short) {
+                params.putShort(key, (Short) value);
+            } else if (value instanceof Float) {
+                params.putFloat(key, (Float) value);
+            } else if (value instanceof Double) {
+                params.putDouble(key, (Double) value);
+            } else {
+                params.putString(key, new Gson().toJson(value));
+            }
         }
     }
 

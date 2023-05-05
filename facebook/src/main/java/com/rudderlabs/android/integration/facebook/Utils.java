@@ -1,10 +1,8 @@
 package com.rudderlabs.android.integration.facebook;
 
-import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.util.Map;
@@ -12,28 +10,6 @@ import java.util.Map;
 public class Utils {
 
     public static final String LIMITED_DATA_USE = "limitedDataUse";
-
-    static Bundle getBundleForMap(Map<String, Object> objectMap) {
-        if (objectMap == null) return null;
-        Bundle bundle = new Bundle();
-        for (String key : objectMap.keySet()) {
-            Object value = objectMap.get(key);
-            if (value instanceof String) {
-                bundle.putString(key, (String) value);
-            } else if (value instanceof Integer) {
-                bundle.putInt(key, (Integer) value);
-            } else if (value instanceof Short) {
-                bundle.putShort(key, (Short) value);
-            } else if (value instanceof Float) {
-                bundle.putFloat(key, (Float) value);
-            } else if (value instanceof Double) {
-                bundle.putDouble(key, (Double) value);
-            } else {
-                bundle.putString(key, new Gson().toJson(value));
-            }
-        }
-        return bundle;
-    }
 
     static String truncate(String value, int length) {
         if (value != null && value.length() > length)
