@@ -1,34 +1,15 @@
 package com.rudderlabs.android.integration.facebook;
 
-import android.os.Bundle;
 
-import com.google.gson.Gson;
+import androidx.annotation.Nullable;
+
 import com.google.gson.JsonObject;
 
 import java.util.Map;
 
 public class Utils {
-    static Bundle getBundleForMap(Map<String, Object> objectMap) {
-        if (objectMap == null) return null;
-        Bundle bundle = new Bundle();
-        for (String key : objectMap.keySet()) {
-            Object value = objectMap.get(key);
-            if (value instanceof String) {
-                bundle.putString(key, (String) value);
-            } else if (value instanceof Integer) {
-                bundle.putInt(key, (Integer) value);
-            } else if (value instanceof Short) {
-                bundle.putShort(key, (Short) value);
-            } else if (value instanceof Float) {
-                bundle.putFloat(key, (Float) value);
-            } else if (value instanceof Double) {
-                bundle.putDouble(key, (Double) value);
-            } else {
-                bundle.putString(key, new Gson().toJson(value));
-            }
-        }
-        return bundle;
-    }
+
+    public static final String LIMITED_DATA_USE = "limitedDataUse";
 
     static String truncate(String value, int length) {
         if (value != null && value.length() > length)
@@ -36,9 +17,10 @@ public class Utils {
         return value;
     }
 
-    static Double getRevenue(Map<String, Object> eventProperties) {
-        if (eventProperties.containsKey("revenue")) {
-            Object revenue = eventProperties.get("revenue");
+    static Double getRevenue(@Nullable Map<String, Object> eventProperties) {
+        if (eventProperties == null) return null;
+        if (eventProperties.containsKey(RSKeys.Ecommerce.REVENUE)) {
+            Object revenue = eventProperties.get(RSKeys.Ecommerce.REVENUE);
             if (revenue instanceof String) {
                 return Double.parseDouble((String) revenue);
             } else if (revenue instanceof Integer) {
@@ -49,9 +31,10 @@ public class Utils {
         return null;
     }
 
-    static String getCurrency(Map<String, Object> eventProperties) {
-        if (eventProperties.containsKey("currency")) {
-            return (String) eventProperties.get("currency");
+    static String getCurrency(@Nullable Map<String, Object> eventProperties) {
+        if (eventProperties == null) return null;
+        if (eventProperties.containsKey(RSKeys.Ecommerce.CURRENCY)) {
+            return String.valueOf(eventProperties.get(RSKeys.Ecommerce.CURRENCY));
         }
         return "USD";
     }
@@ -63,9 +46,9 @@ public class Utils {
         return null;
     }
 
-    static Boolean getBooleanFromJsonObject(JsonObject json, String key) {
-        if (json.has(key)) {
-            return json.get(key).getAsBoolean();
+    static Boolean getBooleanFromJsonObject(JsonObject json) {
+        if (json.has(LIMITED_DATA_USE)) {
+            return json.get(LIMITED_DATA_USE).getAsBoolean();
         }
         return null;
     }
