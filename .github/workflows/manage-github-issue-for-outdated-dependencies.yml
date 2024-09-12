@@ -19,7 +19,7 @@ jobs:
           outdated-dependency-names: "com.facebook.android:facebook-android-sdk"
           directory: "facebook/build.gradle"
           title: "fix: update Facebook SDK to the latest version"
-          assignee: "desusai7"
+          assignee: "@rudderlabs/sdk-android"
           labels: "outdatedDependency"
           color: "FBCA04"
         env:
