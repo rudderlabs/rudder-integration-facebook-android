@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">RudderAndroidClient</string>
-    <!-- Refer to the Facebook docL https://developers.facebook.com/docs/app-events/getting-started-app-events-android-->
+    <!-- Refer to the Facebook doc: https://developers.facebook.com/docs/android/getting-started-->
     <string name="facebook_app_id">APPID</string>
-    <string name="fb_login_protocol_scheme">fbAPPID</string>
     <string name="facebook_client_token">CLIENTOKEN</string>
 
 </resources>
