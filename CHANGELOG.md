@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.2.0 (2024-09-17)
+
+
+### Features
+
+* bump the facebook app events sdk to v17.0.1 ([#13](https://github.com/rudderlabs/rudder-integration-facebook-android/issues/13)) ([f0a2279](https://github.com/rudderlabs/rudder-integration-facebook-android/commit/f0a2279871705a2d9284ad9dc39fb6bb95cab79c))
+
 ## 1.1.0 (2023-05-08)
 
 
