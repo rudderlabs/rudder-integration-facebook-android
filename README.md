@@ -13,23 +13,11 @@ More information on RudderStack can be found [here](https://github.com/rudderlab
   - Turning on the switch beside `Initialize Native SDK to send automated events` in the dashboard will initialize the Facebook native SDK in the application.
   - Turning on the switch beside `Use native SDK to send user generated events` in the dashboard will instruct your `data-plane` to skip the events for Facebook and the events will be sent from the Facebook SDK.
 
-3. Add these lines to your ```app/build.gradle```
-```
-repositories {
-    maven { url "https://dl.bintray.com/rudderstack/rudderstack" }
-}
-```
-4. Add the dependency under ```dependencies```
+3. Add the dependency under ```dependencies``` section of your `app/build.gradle` file:
 ```
 // Rudder core sdk and facebook extension
-implementation 'com.rudderstack.android.sdk:core:1.0.2'
-implementation 'com.rudderstack.android.integration:facebook:1.0.0'
-
-// facebook core sdk
-implementation 'com.facebook.android:facebook-android-sdk:5.9.0'
-
-// gson
-implementation 'com.google.code.gson:gson:2.8.6'
+implementation 'com.rudderstack.android.sdk:core:x.y.z'
+implementation 'com.rudderstack.android.integration:facebook:x.y.z'
 ```
 
 ## Initialize ```RudderClient```
