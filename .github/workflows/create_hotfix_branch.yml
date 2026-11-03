@@ -7,15 +7,14 @@ on:
         description: Hotfix branch name
         required: true
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   create-branch:
     name: Create new branch
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # action-create-branch creates the hotfix branch
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Harden the runner (Audit all outbound calls)
